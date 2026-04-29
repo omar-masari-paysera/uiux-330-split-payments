@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments - Paysera Admin</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--background-neutral-secondary-initial);
+      color: #020617;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Typography ── */
+    .display-l   { font-size: 36px; font-weight: 700; line-height: 1.2; }
+    .headline-m  { font-size: 28px; font-weight: 600; line-height: 1.3; }
+    .headline-s  { font-size: 24px; font-weight: 600; line-height: 1.3; }
+    .title-l     { font-size: 18px; font-weight: 600; line-height: 1.4; }
+    .title-m     { font-size: 16px; font-weight: 600; line-height: 1.4; }
+    .body-l      { font-size: 16px; font-weight: 400; line-height: 1.5; }
+    .body-m      { font-size: 14px; font-weight: 400; line-height: 1.5; }
+    .body-s      { font-size: 12px; font-weight: 400; line-height: 1.5; }
+    .label-l     { font-size: 16px; font-weight: 500; line-height: 1.4; }
+    .label-m     { font-size: 14px; font-weight: 500; line-height: 1.4; }
+    .label-s     { font-size: 12px; font-weight: 500; line-height: 1.4; }
+    .code-s      { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; font-weight: 400; }
+
+    /* ── Shell Layout ── */
+    .shell { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 256px;
+      background: var(--surface-neutral-primary-initial);
+      border-right: 1px solid var(--border-neutral-secondary-initial);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    .sidebar-logo {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+      gap: 10px;
+    }
+
+    .sidebar-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--surface-action-primary-initial);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #020617;
+    }
+
+    .sidebar-nav {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      cursor: pointer;
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--background-neutral-secondary-initial);
+      color: #020617;
+    }
+
+    .sidebar-nav-item.active {
+      background: var(--surface-info-secondary-initial);
+      color: #0f62fe;
+      font-weight: 600;
+    }
+
+    .sidebar-nav-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-nav-icon svg { width: 20px; height: 20px; }
+
+    /* ── Main Area ── */
+    .main-area {
+      margin-left: 256px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      height: 56px;
+      background: var(--surface-neutral-primary-initial);
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .topbar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-action-primary-initial);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── Core Content ── */
+    .core {
+      max-width: 1024px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-input,
+    .filter-select {
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--border-neutral-primary-initial);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: #020617;
+      background: var(--surface-neutral-primary-initial);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+      border-color: var(--surface-action-primary-initial);
+      box-shadow: 0 0 0 2px rgba(15, 98, 254, 0.12);
+    }
+
+    .filter-input { width: 240px; }
+    .filter-select { min-width: 140px; cursor: pointer; }
+
+    .filter-input::placeholder { color: #6b7280; }
+
+    /* ── Table ── */
+    .table-card {
+      background: var(--surface-neutral-primary-initial);
+      border: 1px solid var(--border-neutral-secondary-initial);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      background: var(--background-neutral-secondary-initial);
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+      white-space: nowrap;
+    }
+
+    .data-table tbody tr {
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--background-neutral-secondary-initial);
+    }
+
+    .data-table tbody td {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+      white-space: nowrap;
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table .col-amount {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+
+    .data-table thead .col-amount {
+      text-align: right;
+    }
+
+    .txn-id {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: #0f62fe;
+    }
+
+    .order-id {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: #020617;
+    }
+
+    /* ── Status Tags ── */
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-tag.settled {
+      background: var(--surface-success-secondary-initial);
+      color: #16a34a;
+    }
+    .status-tag.settled .status-dot { background: #16a34a; }
+
+    .status-tag.failed {
+      background: var(--surface-critical-secondary-initial);
+      color: #dc2626;
+    }
+    .status-tag.failed .status-dot { background: #dc2626; }
+
+    .status-tag.on-hold {
+      background: var(--surface-warning-secondary-initial);
+      color: #c2410c;
+    }
+    .status-tag.on-hold .status-dot { background: #c2410c; }
+
+    .status-tag.partially-distributed {
+      background: var(--surface-warning-secondary-initial);
+      color: #c2410c;
+    }
+    .status-tag.partially-distributed .status-dot { background: #c2410c; }
+
+    .status-tag.refunded {
+      background: var(--background-neutral-secondary-initial);
+      color: #6b7280;
+    }
+    .status-tag.refunded .status-dot { background: #6b7280; }
+
+    /* ── Split Badge ── */
+    .split-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--surface-info-secondary-initial);
+      color: #0f62fe;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .split-badge svg { width: 12px; height: 12px; }
+
+    /* ── Pagination ── */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-neutral-secondary-initial);
+    }
+
+    .pagination-info {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .pagination-controls {
+      display: flex;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-neutral-primary-initial);
+      border-radius: 6px;
+      background: var(--surface-neutral-primary-initial);
+      color: #020617;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .page-btn:hover {
+      background: var(--background-neutral-secondary-initial);
+    }
+
+    .page-btn.active {
+      background: var(--surface-action-primary-initial);
+      color: #ffffff;
+      border-color: var(--surface-action-primary-initial);
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-btn svg { width: 16px; height: 16px; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">P</div>
+        <span class="sidebar-logo-text">Paysera</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-nav-item active" href="admin-payments-list.html">
+          <span class="sidebar-nav-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="14" height="14" rx="2"/>
+              <path d="M3 8h14"/>
+              <path d="M8 8v9"/>
+            </svg>
+          </span>
+          Payments
+        </a>
+        <a class="sidebar-nav-item" href="#">
+          <span class="sidebar-nav-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h12v3l-4 3 4 3v3H4V4z"/>
+            </svg>
+          </span>
+          Orders
+        </a>
+        <a class="sidebar-nav-item" href="#">
+          <span class="sidebar-nav-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="7"/>
+              <path d="M10 6v4l3 2"/>
+            </svg>
+          </span>
+          Settlements
+        </a>
+        <a class="sidebar-nav-item" href="#">
+          <span class="sidebar-nav-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15V5a2 2 0 012-2h8a2 2 0 012 2v10"/>
+              <path d="M2 15h16"/>
+              <rect x="7" y="8" width="6" height="4" rx="1"/>
+            </svg>
+          </span>
+          Merchants
+        </a>
+        <a class="sidebar-nav-item" href="#">
+          <span class="sidebar-nav-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="3"/>
+              <path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M5.05 5.05l1.06 1.06M13.89 13.89l1.06 1.06M5.05 14.95l1.06-1.06M13.89 6.11l1.06-1.06"/>
+            </svg>
+          </span>
+          Settings
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-area">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-avatar">AD</div>
+      </header>
+
+      <!-- Core Content -->
+      <main class="core">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="headline-m">Payments</h1>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <input class="filter-input" type="text" placeholder="Search by ID, order, or merchant...">
+          <select class="filter-select">
+            <option>All statuses</option>
+            <option>Settled</option>
+            <option>Failed</option>
+            <option>On Hold</option>
+            <option>Refunded</option>
+          </select>
+          <input class="filter-input" type="text" placeholder="Date range" style="width: 180px;">
+          <select class="filter-select">
+            <option>All methods</option>
+            <option>Visa</option>
+            <option>Mastercard</option>
+            <option>Bank transfer</option>
+            <option>Paysera</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Transaction ID</th>
+                <th>Status</th>
+                <th>Order</th>
+                <th>Payment method</th>
+                <th>Split</th>
+                <th class="col-amount">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="body-m">Apr 3, 2026</td>
+                <td><span class="txn-id">TXN-20260403-00142</span></td>
+                <td><span class="status-tag settled"><span class="status-dot"></span>Settled</span></td>
+                <td><span class="order-id">#ORD-2026-0847</span></td>
+                <td class="body-m">Visa &#8226;&#8226;&#8226;&#8226; 4532</td>
+                <td><span class="split-badge"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2v8M2 6h8"/></svg>Split: 3 recipients</span></td>
+                <td class="col-amount">&euro;1,456.34</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 5, 2026</td>
+                <td><span class="txn-id">TXN-20260405-00198</span></td>
+                <td><span class="status-tag settled"><span class="status-dot"></span>Settled</span></td>
+                <td><span class="order-id">#ORD-2026-0901</span></td>
+                <td class="body-m">Mastercard &#8226;&#8226;&#8226;&#8226; 7821</td>
+                <td><span class="split-badge"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2v8M2 6h8"/></svg>Split: 2 recipients</span></td>
+                <td class="col-amount">&euro;890.00</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 7, 2026</td>
+                <td><span class="txn-id">TXN-20260407-00215</span></td>
+                <td><span class="status-tag settled"><span class="status-dot"></span>Settled</span></td>
+                <td><span class="order-id">#ORD-2026-0934</span></td>
+                <td class="body-m">Bank transfer</td>
+                <td>&mdash;</td>
+                <td class="col-amount">&euro;3,200.50</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 10, 2026</td>
+                <td><span class="txn-id">TXN-20260410-00241</span></td>
+                <td><span class="status-tag failed"><span class="status-dot"></span>Failed</span></td>
+                <td><span class="order-id">#ORD-2026-0987</span></td>
+                <td class="body-m">Visa &#8226;&#8226;&#8226;&#8226; 1190</td>
+                <td><span class="split-badge"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2v8M2 6h8"/></svg>Split: 4 recipients</span></td>
+                <td class="col-amount">&euro;5,670.00</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 11, 2026</td>
+                <td><span class="txn-id">TXN-20260411-00253</span></td>
+                <td><span class="status-tag failed"><span class="status-dot"></span>Failed</span></td>
+                <td><span class="order-id">#ORD-2026-1002</span></td>
+                <td class="body-m">Paysera</td>
+                <td>&mdash;</td>
+                <td class="col-amount">&euro;124.99</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 13, 2026</td>
+                <td><span class="txn-id">TXN-20260413-00267</span></td>
+                <td><span class="status-tag on-hold"><span class="status-dot"></span>On Hold</span></td>
+                <td><span class="order-id">#ORD-2026-1078</span></td>
+                <td class="body-m">Visa &#8226;&#8226;&#8226;&#8226; 3344</td>
+                <td>&mdash;</td>
+                <td class="col-amount">&euro;780.25</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 14, 2026</td>
+                <td><span class="txn-id">TXN-20260414-00274</span></td>
+                <td><span class="status-tag on-hold"><span class="status-dot"></span>On Hold</span></td>
+                <td><span class="order-id">#ORD-2026-1120</span></td>
+                <td class="body-m">Mastercard &#8226;&#8226;&#8226;&#8226; 5501</td>
+                <td>&mdash;</td>
+                <td class="col-amount">&euro;2,100.00</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 15, 2026</td>
+                <td><span class="txn-id">TXN-20260415-00287</span></td>
+                <td><span class="status-tag partially-distributed"><span class="status-dot"></span>Partially Distributed</span></td>
+                <td><span class="order-id">#ORD-2026-1205</span></td>
+                <td class="body-m">Bank transfer</td>
+                <td><span class="split-badge"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2v8M2 6h8"/></svg>Split: 3 recipients</span></td>
+                <td class="col-amount">&euro;2,340.00</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 18, 2026</td>
+                <td><span class="txn-id">TXN-20260418-00312</span></td>
+                <td><span class="status-tag partially-distributed"><span class="status-dot"></span>Partially Distributed</span></td>
+                <td><span class="order-id">#ORD-2026-1289</span></td>
+                <td class="body-m">Visa &#8226;&#8226;&#8226;&#8226; 8877</td>
+                <td><span class="split-badge"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2v8M2 6h8"/></svg>Split: 2 recipients</span></td>
+                <td class="col-amount">&euro;1,050.75</td>
+              </tr>
+              <tr>
+                <td class="body-m">Apr 20, 2026</td>
+                <td><span class="txn-id">TXN-20260420-00330</span></td>
+                <td><span class="status-tag refunded"><span class="status-dot"></span>Refunded</span></td>
+                <td><span class="order-id">#ORD-2026-1340</span></td>
+                <td class="body-m">Paysera</td>
+                <td>&mdash;</td>
+                <td class="col-amount">&euro;445.00</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="pagination-bar">
+            <span class="pagination-info">Showing 1&ndash;10 of 47 items</span>
+            <div class="pagination-controls">
+              <button class="page-btn" disabled>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+              </button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">5</button>
+              <button class="page-btn">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

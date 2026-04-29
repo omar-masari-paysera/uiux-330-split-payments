@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment TXN-20260420-00391 -- On Hold</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #020617;
+      background: var(--background-neutral-secondary-initial);
+    }
+
+    /* Typography classes */
+    .headline-m { font-size: 28px; font-weight: 600; line-height: 1.3; }
+    .title-m    { font-size: 16px; font-weight: 600; line-height: 1.4; }
+    .body-m     { font-size: 14px; font-weight: 400; line-height: 1.5; }
+    .body-s     { font-size: 12px; font-weight: 400; line-height: 1.5; }
+    .label-m    { font-size: 14px; font-weight: 500; line-height: 1.4; }
+    .label-s    { font-size: 12px; font-weight: 500; line-height: 1.4; }
+
+    /* ── Shell ── */
+    .shell { display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 256px; min-width: 256px;
+      background: var(--surface-neutral-primary-initial);
+      border-right: 1px solid var(--border-neutral-secondary-initial);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 10;
+    }
+    .sidebar-logo {
+      height: 56px; display: flex; align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+    }
+    .sidebar-logo span { font-size: 18px; font-weight: 700; color: var(--surface-action-primary-initial); }
+    .sidebar-nav { padding: 12px 8px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 8px;
+      color: #6b7280; text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: background .15s, color .15s; cursor: pointer;
+    }
+    .nav-item:hover { background: var(--background-neutral-secondary-initial); color: #020617; }
+    .nav-item.active {
+      background: var(--surface-info-secondary-initial);
+      color: var(--surface-action-primary-initial); font-weight: 600;
+    }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* ── Topbar ── */
+    .topbar {
+      height: 56px;
+      background: var(--surface-neutral-primary-initial);
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 0 24px; margin-left: 256px;
+      position: fixed; top: 0; right: 0; left: 0; z-index: 9;
+    }
+    .topbar-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface-action-primary-initial); color: #ffffff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+    }
+
+    /* ── Main area ── */
+    .main-area { margin-left: 256px; margin-top: 56px; flex: 1; }
+    .core {
+      max-width: 1024px; margin: 0 auto; padding: 32px;
+    }
+
+    /* ── Breadcrumbs ── */
+    .breadcrumbs { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .breadcrumbs a { color: #6b7280; text-decoration: none; font-size: 13px; font-weight: 500; }
+    .breadcrumbs a:hover { color: var(--surface-action-primary-initial); }
+    .breadcrumbs .sep { color: #9ca3af; font-size: 11px; }
+    .breadcrumbs .current { color: #020617; font-size: 13px; font-weight: 500; }
+
+    /* ── Page header ── */
+    .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+
+    /* ── Status tag ── */
+    .tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; line-height: 1.4;
+    }
+    .tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .tag--warning  { background: var(--surface-warning-secondary-initial); color: #c2410c; }
+    .tag--warning::before  { background: #c2410c; }
+    .tag--success  { background: var(--surface-success-secondary-initial); color: #16a34a; }
+    .tag--success::before  { background: #16a34a; }
+
+    /* ── Alert banner ── */
+    .alert {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px; border-radius: 10px;
+      margin-bottom: 24px; font-size: 14px; line-height: 1.5;
+    }
+    .alert--warning {
+      background: var(--surface-warning-secondary-initial);
+      border: 1px solid #fdba74; color: #c2410c;
+    }
+    .alert svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Two-column layout ── */
+    .two-col { display: flex; gap: 24px; align-items: flex-start; }
+    .col-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .col-summary { width: 280px; min-width: 280px; position: sticky; top: 88px; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface-neutral-primary-initial);
+      border: 1px solid var(--border-neutral-secondary-initial);
+      border-radius: 12px; overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+    }
+    .card-body { padding: 20px; }
+
+    /* ── Summary rows ── */
+    .s-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-neutral-secondary-initial);
+    }
+    .s-row:last-child { border-bottom: none; }
+    .s-label { color: #6b7280; font-size: 13px; }
+    .s-value { color: #020617; font-size: 13px; font-weight: 500; text-align: right; }
+    .s-value--lg { font-size: 20px; font-weight: 700; }
+    .s-value--link { color: var(--surface-action-primary-initial); }
+    .s-value--sm { font-size: 12px; }
+
+    /* ── Distribution ── */
+    .dist-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0 16px;
+    }
+    .ben-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 16px 0;
+      border-top: 1px solid var(--border-neutral-secondary-initial);
+    }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; color: #ffffff; flex-shrink: 0;
+    }
+    .avatar--blue   { background: var(--surface-action-primary-initial); }
+    .avatar--purple { background: #7c3aed; }
+    .ben-info { flex: 1; min-width: 0; }
+    .ben-name { font-size: 14px; font-weight: 600; color: #020617; }
+    .ben-acct { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .ben-note {
+      display: flex; align-items: flex-start; gap: 6px;
+      margin-top: 8px; padding: 8px 10px;
+      background: var(--background-neutral-secondary-initial);
+      border-radius: 6px; font-size: 12px; color: #6b7280; line-height: 1.5;
+    }
+    .ben-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    .ben-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;
+    }
+    .ben-amount { font-size: 16px; font-weight: 600; color: #020617; }
+    .ben-pct   { font-size: 12px; color: #6b7280; }
+
+    .dist-divider { border: none; border-top: 1px solid var(--border-neutral-primary-initial); margin: 8px 0; }
+    .dist-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0 4px;
+    }
+
+    /* ── Timeline ── */
+    .tl-item { display: flex; gap: 16px; position: relative; padding-bottom: 24px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot-col { display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0; }
+    .tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .tl-dot--success { background: #16a34a; }
+    .tl-dot--warning { background: #ea580c; }
+    .tl-dot--disabled { background: transparent; border: 2px dashed #9ca3af; }
+    .tl-line { width: 2px; flex: 1; margin-top: 4px; }
+    .tl-line--solid { background: var(--border-neutral-primary-initial); }
+    .tl-line--dashed {
+      background: repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 4px, transparent 4px, transparent 8px);
+    }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-content { flex: 1; min-width: 0; }
+    .tl-date { font-size: 12px; color: #6b7280; margin-bottom: 2px; }
+    .tl-label { font-size: 14px; font-weight: 500; color: #020617; }
+    .tl-amount { font-size: 13px; color: #6b7280; margin-top: 2px; }
+    .tl-muted { color: #9ca3af; }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span>Paysera</span></div>
+    <nav class="sidebar-nav">
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="16" height="14" rx="2"/><path d="M2 7h16"/><path d="M6 11h4"/></svg>
+        Payments
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h12v14H4z"/><path d="M7 8h6M7 11h4"/></svg>
+        Orders
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M3 10h14M10 3v14"/></svg>
+        Settlements
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="14" height="10" rx="2"/><path d="M7 10h6"/></svg>
+        Merchants
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="3"/><path d="M10 3v2M10 15v2M17 10h-2M5 10H3M14.95 5.05l-1.41 1.41M6.46 13.54l-1.41 1.41M14.95 14.95l-1.41-1.41M6.46 6.46L5.05 5.05"/></svg>
+        Settings
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-avatar">AK</div>
+  </header>
+
+  <!-- Main -->
+  <main class="main-area">
+    <div class="core">
+
+      <!-- Breadcrumbs -->
+      <div class="breadcrumbs">
+        <a href="#">Payments</a>
+        <span class="sep">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 2.5L8 6 4.5 9.5" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="current">Payment TXN-20260420-00391</span>
+      </div>
+
+      <!-- Page header -->
+      <div class="page-header">
+        <h1 class="headline-m">Payment TXN-20260420-00391</h1>
+        <span class="tag tag--warning">On Hold</span>
+      </div>
+
+      <!-- Alert -->
+      <div class="alert alert--warning">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.168 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+        <span>Distribution on hold -- 48-hour reserve policy in effect. Funds will be released after review period.</span>
+      </div>
+
+      <!-- Two-column layout -->
+      <div class="two-col">
+
+        <!-- Main column -->
+        <div class="col-main">
+
+          <!-- Distribution Breakdown -->
+          <div class="card">
+            <div class="card-header"><h2 class="title-m">Distribution Breakdown</h2></div>
+            <div class="card-body">
+
+              <div class="dist-header">
+                <span class="label-m" style="color:#6b7280;">Order amount</span>
+                <span class="label-m" style="font-weight:600;">&euro;890.00</span>
+              </div>
+
+              <!-- Beneficiary 1 -->
+              <div class="ben-row">
+                <div class="avatar avatar--blue">LR</div>
+                <div class="ben-info">
+                  <div class="ben-name">Lisa Roberts</div>
+                  <div class="ben-acct">EVP3710000002468</div>
+                  <div class="ben-note">
+                    <svg viewBox="0 0 16 16" fill="#6b7280"><path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zm-.75 4a.75.75 0 011.5 0v.5a.75.75 0 01-1.5 0V5zm0 2.5a.75.75 0 011.5 0v3a.75.75 0 01-1.5 0v-3z" clip-rule="evenodd"/></svg>
+                    <span>Reserve period: 48 hours from payment receipt. Expected release: Apr 22, 2026</span>
+                  </div>
+                </div>
+                <div class="ben-right">
+                  <span class="ben-amount">&euro;801.00</span>
+                  <span class="tag tag--warning">On Hold</span>
+                  <span class="ben-pct">90% of order amount</span>
+                </div>
+              </div>
+
+              <!-- Beneficiary 2 -->
+              <div class="ben-row">
+                <div class="avatar avatar--purple">PT</div>
+                <div class="ben-info">
+                  <div class="ben-name">Platform Tax</div>
+                  <div class="ben-acct">EVP3710000005678</div>
+                  <div class="ben-note">
+                    <span style="color:#9ca3af;">&euro;0.00 -- zero-amount beneficiary. Tax withholding calculated at settlement.</span>
+                  </div>
+                </div>
+                <div class="ben-right">
+                  <span class="ben-amount">&euro;0.00</span>
+                  <span class="tag tag--warning">On Hold</span>
+                  <span class="ben-pct">Deferred -- released with primary</span>
+                </div>
+              </div>
+
+              <hr class="dist-divider">
+              <div class="dist-total">
+                <span class="label-m" style="font-weight:600;">Total pending</span>
+                <span style="font-size:16px; font-weight:700;">&euro;890.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction Timeline -->
+          <div class="card">
+            <div class="card-header"><h2 class="title-m">Transaction Timeline</h2></div>
+            <div class="card-body">
+              <div>
+                <!-- 1 -->
+                <div class="tl-item">
+                  <div class="tl-dot-col">
+                    <div class="tl-dot tl-dot--success"></div>
+                    <div class="tl-line tl-line--solid"></div>
+                  </div>
+                  <div class="tl-content">
+                    <div class="tl-date">Apr 20, 16:05</div>
+                    <div class="tl-label">Payment received</div>
+                    <div class="tl-amount">&euro;890.00</div>
+                  </div>
+                </div>
+                <!-- 2 -->
+                <div class="tl-item">
+                  <div class="tl-dot-col">
+                    <div class="tl-dot tl-dot--warning"></div>
+                    <div class="tl-line tl-line--dashed"></div>
+                  </div>
+                  <div class="tl-content">
+                    <div class="tl-date">Apr 20, 16:05</div>
+                    <div class="tl-label">Distribution placed on hold</div>
+                    <div class="tl-amount">&euro;890.00</div>
+                  </div>
+                </div>
+                <!-- 3 -->
+                <div class="tl-item">
+                  <div class="tl-dot-col">
+                    <div class="tl-dot tl-dot--disabled"></div>
+                  </div>
+                  <div class="tl-content">
+                    <div class="tl-date tl-muted">Expected: Apr 22, 16:05</div>
+                    <div class="tl-label tl-muted">Scheduled release</div>
+                    <div class="tl-amount" style="color:#bcc1c9;">&euro;890.00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Summary column -->
+        <div class="col-summary">
+          <div class="card">
+            <div class="card-body">
+              <div class="s-row">
+                <span class="s-label">Amount</span>
+                <span class="s-value s-value--lg">&euro;890.00</span>
+              </div>
+              <div class="s-row">
+                <span class="s-label">Payment method</span>
+                <span class="s-value">Visa &bull;&bull;&bull;&bull; 7821</span>
+              </div>
+              <div class="s-row">
+                <span class="s-label">Order</span>
+                <span class="s-value s-value--link">#ORD-2026-1589</span>
+              </div>
+              <div class="s-row">
+                <span class="s-label">Date</span>
+                <span class="s-value">Apr 20, 2026, 16:05</span>
+              </div>
+              <div class="s-row">
+                <span class="s-label">Transaction ID</span>
+                <span class="s-value s-value--sm">TXN-20260420-00391</span>
+              </div>
+              <div class="s-row">
+                <span class="s-label">Split</span>
+                <span class="s-value">2 recipients</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

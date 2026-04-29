@@ -1,117 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>UIUX-330: Split Payments — UI Prototype</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UIUX-330: Split Payments — Prototype Versions</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: { sans: ['Inter', 'sans-serif'] },
-      colors: {
-        'background-neutral-primary-initial': '#f5f5f5',
-        'surface-neutral-primary-initial': '#ffffff',
-        'surface-action-primary-initial': '#0f62fe',
-        'neutral-primary-initial': '#161616',
-        'neutral-secondary-initial': '#6f6f6f',
-        'action-primary-initial': '#0f62fe',
-        'success-primary-initial': '#198038',
-        'warning-primary-initial': '#b28600',
-        'critical-primary-initial': '#da1e28',
-        'inversed-primary-initial': '#ffffff',
-      }
-    }
-  }
-}
-</script>
 <style>
-  .headline-l { font-size: 32px; font-weight: 600; line-height: 1.2; }
-  .headline-m { font-size: 28px; font-weight: 600; line-height: 1.2; }
-  .title-m { font-size: 16px; font-weight: 600; line-height: 1.4; }
-  .body-s { font-size: 14px; font-weight: 400; line-height: 1.4; }
-  .label-m { font-size: 14px; font-weight: 500; line-height: 1.4; }
-  .label-s { font-size: 12px; font-weight: 500; line-height: 1.3; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f3f4f6;
+        color: #020617;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+    }
+    .container { max-width: 640px; width: 100%; }
+    h1 { font-size: 32px; font-weight: 600; text-align: center; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #6b7280; text-align: center; margin-bottom: 40px; }
+    .badge {
+        display: inline-block; padding: 2px 10px; border-radius: 9999px;
+        font-size: 12px; font-weight: 500; background: #0f62fe; color: #fff;
+        margin-left: 8px; vertical-align: middle;
+    }
+    .version-grid { display: flex; flex-direction: column; gap: 16px; }
+    .version-card {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: 16px;
+        padding: 28px 32px; text-decoration: none; color: inherit;
+        display: flex; align-items: center; gap: 20px;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .version-card:hover {
+        border-color: #0f62fe;
+        box-shadow: 0 0 0 1px #0f62fe;
+    }
+    .version-num {
+        width: 56px; height: 56px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px; font-weight: 700; flex-shrink: 0;
+    }
+    .version-num.v1 { background: #f3f4f6; color: #6b7280; }
+    .version-num.v2 { background: #eff6ff; color: #0f62fe; }
+    .version-body h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .version-body p { font-size: 13px; color: #6b7280; line-height: 1.4; }
+    .version-tag {
+        display: inline-block; padding: 2px 8px; border-radius: 4px;
+        font-size: 11px; font-weight: 500; margin-left: 8px; vertical-align: middle;
+    }
+    .tag-old { background: #f3f4f6; color: #6b7280; }
+    .tag-new { background: #dcfce7; color: #16a34a; }
+    .arrow { margin-left: auto; color: #9ca3af; font-size: 20px; flex-shrink: 0; }
 </style>
 </head>
-<body class="bg-background-neutral-primary-initial font-sans antialiased">
-<div class="min-h-screen flex items-center justify-center p-8">
-  <div class="max-w-[640px] w-full">
-    <div class="text-center mb-10">
-      <span class="inline-flex items-center px-3 py-1 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s mb-4">UIUX-330</span>
-      <h1 class="headline-l text-neutral-primary-initial mb-2">Split Payments</h1>
-      <p class="body-s text-neutral-secondary-initial">Payments List Extension — UI Prototype</p>
+<body>
+    <div class="container">
+        <h1>Split Payments<span class="badge">UIUX-330</span></h1>
+        <p class="subtitle">Select a prototype version to view</p>
+
+        <div class="version-grid">
+            <a class="version-card" href="v1/index.html">
+                <div class="version-num v1">V1</div>
+                <div class="version-body">
+                    <h2>Version 1 <span class="version-tag tag-old">Previous</span></h2>
+                    <p>First iteration — CDN Tailwind + Lucide icons, inline color config. 6 pages.</p>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+            <a class="version-card" href="v2/index.html">
+                <div class="version-num v2">V2</div>
+                <div class="version-body">
+                    <h2>Version 2 <span class="version-tag tag-new">Latest</span></h2>
+                    <p>Redesigned — Paysera UI tokens.css, semantic color tokens, improved layouts. 6 pages.</p>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+        </div>
     </div>
-
-    <div class="space-y-3">
-      <a href="admin-payments-list.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Admin Payments List</span>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Table with split payment badges and status filters</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="admin-payment-details-settled.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Admin Payment Details</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span>
-          </div>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Distribution breakdown, timeline, refund button</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="admin-payment-details-failed.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Admin Payment Details</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-critical-primary-initial"></span><span class="label-s text-critical-primary-initial">Failed</span></span>
-          </div>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Failed distributions with error reasons and retry actions</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="admin-payment-details-onhold.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Admin Payment Details</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-neutral-secondary-initial"></span><span class="label-s text-neutral-secondary-initial">On Hold</span></span>
-          </div>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Delayed distributions with reserve policy tooltips</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="merchant-payment-details-settled.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Merchant Payment Details</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span>
-          </div>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Merchant view — no refund action, read-only breakdown</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-
-      <a href="admin-payment-details-refund-modal.html" class="flex items-center justify-between p-4 bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial hover:border-action-primary-initial transition-colors group">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="title-m text-neutral-primary-initial group-hover:text-action-primary-initial transition-colors">Admin Payment Details</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-critical-primary-initial"></span><span class="label-s text-critical-primary-initial">Refund Modal</span></span>
-          </div>
-          <p class="body-s text-neutral-secondary-initial mt-0.5">Post-refund state with confirmation modal open</p>
-        </div>
-        <svg class="w-5 h-5 text-neutral-secondary-initial group-hover:text-action-primary-initial transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-
-    <p class="text-center body-s text-neutral-secondary-initial mt-8">Static HTML prototype — no build required</p>
-  </div>
-</div>
 </body>
 </html>
