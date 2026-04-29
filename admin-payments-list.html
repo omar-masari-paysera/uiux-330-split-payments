@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Payments List — UIUX-330</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=PT+Mono&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['PT Mono', 'monospace'] },
+      colors: {
+        'background-neutral-primary-initial': '#f5f5f5',
+        'surface-neutral-primary-initial': '#ffffff',
+        'surface-action-primary-initial': '#0f62fe',
+        'surface-action-primary-hover': '#0353e9',
+        'surface-action-secondary-hover': '#e8e8e8',
+        'surface-action-tertiary-initial': '#1e293b',
+        'surface-success-primary-initial': '#dcfce7',
+        'surface-warning-primary-initial': '#fef9c3',
+        'surface-critical-primary-initial': '#fee2e2',
+        'surface-info-primary-initial': '#dbeafe',
+        'surface-neutral-secondary-initial': '#f0f0f0',
+        'neutral-primary-initial': '#161616',
+        'neutral-secondary-initial': '#6f6f6f',
+        'neutral-tertiary-initial': '#a8a8a8',
+        'action-primary-initial': '#0f62fe',
+        'action-secondary-initial': '#c6c6c6',
+        'success-primary-initial': '#198038',
+        'warning-primary-initial': '#b28600',
+        'critical-primary-initial': '#da1e28',
+        'inversed-primary-initial': '#ffffff',
+        'info-primary-initial': '#0043ce',
+      }
+    }
+  }
+}
+</script>
+<style>
+  .headline-m { font-size: 28px; font-weight: 600; line-height: 1.2; }
+  .headline-s { font-size: 24px; font-weight: 600; line-height: 1.2; }
+  .title-m { font-size: 16px; font-weight: 600; line-height: 1.4; }
+  .body-l { font-size: 16px; font-weight: 400; line-height: 1.5; }
+  .body-s { font-size: 14px; font-weight: 400; line-height: 1.4; }
+  .label-l { font-size: 16px; font-weight: 500; line-height: 1.4; }
+  .label-m { font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .label-s { font-size: 12px; font-weight: 500; line-height: 1.3; }
+  .code-s { font-size: 12px; font-weight: 400; line-height: 1.3; font-family: 'PT Mono', monospace; }
+</style>
+</head>
+<body class="bg-background-neutral-primary-initial font-sans antialiased">
+<div class="flex h-screen overflow-hidden">
+
+  <!-- TOPBAR -->
+  <header class="fixed top-0 left-0 right-0 h-14 bg-surface-neutral-primary-initial border-b border-neutral-secondary-initial flex items-center z-50">
+    <button class="w-14 h-14 flex items-center justify-center hover:bg-surface-action-secondary-hover">
+      <i data-lucide="layout-grid" class="w-5 h-5 text-neutral-primary-initial"></i>
+    </button>
+    <div class="flex items-center gap-2 px-2">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#0f62fe"/><text x="7" y="17" font-family="Inter" font-weight="700" font-size="14" fill="white">P</text></svg>
+      <span class="label-m text-neutral-primary-initial">paysera</span>
+      <span class="text-neutral-tertiary-initial mx-1">|</span>
+      <span class="label-m text-neutral-secondary-initial">Admin</span>
+    </div>
+    <div class="flex-1"></div>
+    <div class="flex items-center gap-2 px-4">
+      <div class="w-8 h-8 rounded-full bg-surface-action-primary-initial flex items-center justify-center">
+        <span class="label-s text-inversed-primary-initial">AD</span>
+      </div>
+      <span class="label-m text-neutral-primary-initial">Admin User</span>
+      <i data-lucide="chevron-down" class="w-4 h-4 text-neutral-secondary-initial"></i>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="fixed top-14 left-0 bottom-0 w-64 bg-surface-action-tertiary-initial overflow-y-auto" role="navigation" aria-label="Main navigation">
+    <nav class="py-3 px-4 space-y-1">
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300 hover:bg-gray-700 transition-colors">
+        <i data-lucide="layout-dashboard" class="w-5 h-5"></i><span class="label-m">Dashboard</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300 hover:bg-gray-700 transition-colors">
+        <i data-lucide="folder" class="w-5 h-5"></i><span class="label-m">Projects</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded bg-gray-700 text-inversed-primary-initial" aria-current="page">
+        <i data-lucide="credit-card" class="w-5 h-5"></i><span class="label-m">Payments</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300 hover:bg-gray-700 transition-colors">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i><span class="label-m">Orders</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300 hover:bg-gray-700 transition-colors">
+        <i data-lucide="wallet" class="w-5 h-5"></i><span class="label-m">Payment Methods</span>
+      </a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300 hover:bg-gray-700 transition-colors">
+        <i data-lucide="settings" class="w-5 h-5"></i><span class="label-m">Settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ml-64 mt-14 flex-1 overflow-auto" role="main">
+    <div class="max-w-[1024px] mx-auto p-8">
+
+      <div class="mb-6">
+        <h1 class="headline-m text-neutral-primary-initial">Payments</h1>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex items-center gap-3 mb-4 flex-wrap">
+        <button class="h-8 px-3 rounded-full border border-action-secondary-initial text-neutral-primary-initial label-m flex items-center gap-1.5 hover:bg-surface-action-secondary-hover transition-colors">
+          Status <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </button>
+        <button class="h-8 px-3 rounded-full border border-action-secondary-initial text-neutral-primary-initial label-m flex items-center gap-1.5 hover:bg-surface-action-secondary-hover transition-colors">
+          Payment method <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </button>
+        <button class="h-8 px-3 rounded-full border border-action-secondary-initial text-neutral-primary-initial label-m flex items-center gap-1.5 hover:bg-surface-action-secondary-hover transition-colors">
+          Date range <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial overflow-hidden">
+        <table class="w-full">
+          <thead>
+            <tr class="bg-surface-neutral-secondary-initial border-b border-neutral-secondary-initial">
+              <th class="text-left px-4 py-3 label-m text-neutral-secondary-initial">Date <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+              <th class="text-left px-4 py-3 label-m text-neutral-secondary-initial">Status</th>
+              <th class="text-left px-4 py-3 label-m text-neutral-secondary-initial">Order</th>
+              <th class="text-left px-4 py-3 label-m text-neutral-secondary-initial">Payment method</th>
+              <th class="text-left px-4 py-3 label-m text-neutral-secondary-initial">Split</th>
+              <th class="text-right px-4 py-3 label-m text-neutral-secondary-initial">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-03 14:22</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8834</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Bank Transfer</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 3 recipients</span></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€1,456.34</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-03 13:15</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8833</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Card</td>
+              <td class="px-4 py-3"></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€89.00</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-02 18:45</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-warning-primary-initial"></span><span class="label-s text-warning-primary-initial">Partially Distributed</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8830</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Bank Transfer</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 4 recipients</span></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€2,340.00</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-02 16:30</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-critical-primary-initial"></span><span class="label-s text-critical-primary-initial">Failed</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8829</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Card</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 2 recipients</span></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€567.80</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-02 11:00</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-warning-primary-initial"></span><span class="label-s text-warning-primary-initial">Pending</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8828</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Bank Transfer</td>
+              <td class="px-4 py-3"></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€123.45</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-01 09:20</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-neutral-secondary-initial"></span><span class="label-s text-neutral-secondary-initial">On Hold</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8825</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Card</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 2 recipients</span></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€890.00</td>
+            </tr>
+            <tr class="border-b border-neutral-secondary-initial hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-04-01 08:45</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8824</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Bank Transfer</td>
+              <td class="px-4 py-3"></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€45.00</td>
+            </tr>
+            <tr class="hover:bg-surface-action-secondary-hover cursor-pointer transition-colors">
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">2026-03-31 22:10</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success-primary-initial"></span><span class="label-s text-success-primary-initial">Settled</span></span></td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">ORD-8820</td>
+              <td class="px-4 py-3 body-s text-neutral-primary-initial">Card</td>
+              <td class="px-4 py-3"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 5 recipients</span></td>
+              <td class="px-4 py-3 text-right label-m text-neutral-primary-initial">€3,200.00</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-4 py-3 border-t border-neutral-secondary-initial">
+          <span class="body-s text-neutral-secondary-initial">Showing 1-8 of 42 payments</span>
+          <div class="flex items-center gap-1">
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-secondary-initial hover:bg-surface-action-secondary-hover">
+              <i data-lucide="chevron-left" class="w-4 h-4"></i>
+            </button>
+            <button class="w-8 h-8 rounded flex items-center justify-center bg-surface-action-primary-initial text-inversed-primary-initial label-s">1</button>
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-primary-initial hover:bg-surface-action-secondary-hover label-s">2</button>
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-primary-initial hover:bg-surface-action-secondary-hover label-s">3</button>
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-primary-initial hover:bg-surface-action-secondary-hover label-s">4</button>
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-primary-initial hover:bg-surface-action-secondary-hover label-s">5</button>
+            <button class="w-8 h-8 rounded flex items-center justify-center text-neutral-secondary-initial hover:bg-surface-action-secondary-hover">
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

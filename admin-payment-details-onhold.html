@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Payment Details (On Hold) — UIUX-330</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=PT+Mono&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['PT Mono', 'monospace'] },
+    colors: {
+      'background-neutral-primary-initial': '#f5f5f5', 'surface-neutral-primary-initial': '#ffffff',
+      'surface-action-primary-initial': '#0f62fe', 'surface-action-tertiary-initial': '#1e293b',
+      'surface-action-secondary-hover': '#e8e8e8', 'surface-info-primary-initial': '#dbeafe',
+      'surface-neutral-secondary-initial': '#f0f0f0',
+      'neutral-primary-initial': '#161616', 'neutral-secondary-initial': '#6f6f6f',
+      'neutral-tertiary-initial': '#a8a8a8', 'action-primary-initial': '#0f62fe',
+      'info-primary-initial': '#0043ce', 'inversed-primary-initial': '#ffffff',
+    }
+  }}
+}
+</script>
+<style>
+  .headline-m { font-size: 28px; font-weight: 600; line-height: 1.2; }
+  .title-m { font-size: 16px; font-weight: 600; line-height: 1.4; }
+  .body-l { font-size: 16px; font-weight: 400; line-height: 1.5; }
+  .body-s { font-size: 14px; font-weight: 400; line-height: 1.4; }
+  .label-m { font-size: 14px; font-weight: 500; line-height: 1.4; }
+  .label-s { font-size: 12px; font-weight: 500; line-height: 1.3; }
+  .code-s { font-size: 12px; font-weight: 400; line-height: 1.3; font-family: 'PT Mono', monospace; }
+  .tooltip-trigger:hover + .tooltip-content { display: block; }
+  .tooltip-content { display: none; position: absolute; z-index: 10; }
+</style>
+</head>
+<body class="bg-background-neutral-primary-initial font-sans antialiased">
+<div class="flex h-screen overflow-hidden">
+  <header class="fixed top-0 left-0 right-0 h-14 bg-surface-neutral-primary-initial border-b border-neutral-secondary-initial flex items-center z-50">
+    <button class="w-14 h-14 flex items-center justify-center"><i data-lucide="layout-grid" class="w-5 h-5 text-neutral-primary-initial"></i></button>
+    <div class="flex items-center gap-2 px-2"><svg width="24" height="24" viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#0f62fe"/><text x="7" y="17" font-family="Inter" font-weight="700" font-size="14" fill="white">P</text></svg><span class="label-m text-neutral-primary-initial">paysera</span><span class="text-neutral-tertiary-initial mx-1">|</span><span class="label-m text-neutral-secondary-initial">Admin</span></div>
+    <div class="flex-1"></div>
+    <div class="flex items-center gap-2 px-4"><div class="w-8 h-8 rounded-full bg-surface-action-primary-initial flex items-center justify-center"><span class="label-s text-inversed-primary-initial">AD</span></div><span class="label-m text-neutral-primary-initial">Admin User</span></div>
+  </header>
+  <aside class="fixed top-14 left-0 bottom-0 w-64 bg-surface-action-tertiary-initial overflow-y-auto" role="navigation">
+    <nav class="py-3 px-4 space-y-1">
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300"><i data-lucide="layout-dashboard" class="w-5 h-5"></i><span class="label-m">Dashboard</span></a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded bg-gray-700 text-inversed-primary-initial" aria-current="page"><i data-lucide="credit-card" class="w-5 h-5"></i><span class="label-m">Payments</span></a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2 rounded text-gray-300"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span class="label-m">Orders</span></a>
+    </nav>
+  </aside>
+
+  <main class="ml-64 mt-14 flex-1 overflow-auto" role="main">
+    <div class="max-w-[1024px] mx-auto p-8">
+      <nav class="flex items-center gap-1.5 label-m">
+        <a href="admin-payments-list.html" class="text-action-primary-initial hover:underline">Payments</a>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-neutral-secondary-initial"></i>
+        <span class="text-neutral-primary-initial">TXN-20260401-00137</span>
+      </nav>
+
+      <div class="flex items-center gap-3 mt-4 mb-4">
+        <h1 class="headline-m text-neutral-primary-initial">Payment TXN-20260401-00137</h1>
+        <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-neutral-secondary-initial"></span><span class="label-m text-neutral-secondary-initial">On Hold</span></span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-action-primary-initial text-inversed-primary-initial label-s">Split: 2 recipients</span>
+      </div>
+
+      <!-- Info Alert -->
+      <div class="rounded-lg border border-info-primary-initial bg-surface-info-primary-initial p-4 mb-6">
+        <div class="flex gap-3">
+          <i data-lucide="info" class="w-5 h-5 text-info-primary-initial shrink-0 mt-0.5"></i>
+          <div>
+            <p class="label-m text-neutral-primary-initial">Payment on hold</p>
+            <p class="body-s text-neutral-secondary-initial mt-1">Distributions are held under the 48-hour reserve policy for new merchants. Funds will be released automatically on 2026-04-03.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-6">
+        <div class="flex-1 min-w-0">
+          <div class="bg-surface-neutral-primary-initial rounded-lg border border-neutral-secondary-initial p-6">
+            <h2 class="title-m text-neutral-primary-initial mb-4">Distribution Breakdown</h2>
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-neutral-secondary-initial">
+              <span class="body-l text-neutral-secondary-initial">Order amount</span>
+              <span class="title-m text-neutral-primary-initial">€890.00</span>
+            </div>
+
+            <!-- Beneficiary 1 -->
+            <div class="py-4 border-b border-neutral-secondary-initial flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-surface-action-primary-initial flex items-center justify-center shrink-0"><span class="label-s text-inversed-primary-initial">PL</span></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="label-m text-neutral-primary-initial">UAB Paysera LT</span>
+                  <div class="relative inline-flex">
+                    <span class="tooltip-trigger inline-flex items-center gap-1 cursor-help"><span class="w-2 h-2 rounded-full bg-neutral-secondary-initial"></span><span class="label-s text-neutral-secondary-initial">On Hold</span><i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-secondary-initial"></i></span>
+                    <div class="tooltip-content bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-neutral-primary-initial text-inversed-primary-initial body-s shadow-lg">48-hour reserve policy for new merchants. Funds release: 2026-04-03.</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 mt-1"><span class="code-s text-neutral-secondary-initial">EVP3710002583421</span><span class="body-s text-neutral-secondary-initial">· Platform fee (50%)</span></div>
+              </div>
+              <span class="title-m text-neutral-primary-initial">€445.00</span>
+            </div>
+
+            <!-- Beneficiary 2 -->
+            <div class="py-4 border-b border-neutral-secondary-initial flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-surface-info-primary-initial flex items-center justify-center shrink-0"><span class="label-s text-info-primary-initial">MG</span></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="label-m text-neutral-primary-initial">Maria Garcia</span>
+                  <div class="relative inline-flex">
+                    <span class="tooltip-trigger inline-flex items-center gap-1 cursor-help"><span class="w-2 h-2 rounded-full bg-neutral-secondary-initial"></span><span class="label-s text-neutral-secondary-initial">On Hold</span><i data-lucide="help-circle" class="w-3.5 h-3.5 text-neutral-secondary-initial"></i></span>
+                    <div class="tooltip-content bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-neutral-primary-initial text-inversed-primary-initial body-s shadow-lg">48-hour reserve policy for new merchants. Funds release: 2026-04-03.</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 mt-1"><span class="code-s text-neutral-secondary-initial">PSR-78234</span><span class="body-s text-neutral-secondary-initial">· Service provider (50%)</span></div>
+              </div>
+              <span class="title-m text-neutral-primary-initial">€445.00</span>
+            </div>
+
+            <div class="mt-4 pt-4 flex items-center justify-between">
+              <span class="label-m text-neutral-primary-initial">Total collected</span>
+              <span class="title-m text-neutral-primary-initial">€890.00</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="w-[280px] shrink-0" role="complementary">
+          <div class="sticky top-8 rounded-lg border border-neutral-secondary-initial bg-surface-neutral-primary-initial p-6">
+            <div class="mb-4"><span class="body-s text-neutral-secondary-initial">Payment Amount</span><p class="headline-m text-neutral-primary-initial">€890.00</p></div>
+            <div class="space-y-3">
+              <div class="flex justify-between"><span class="body-s text-neutral-secondary-initial">Method</span><span class="label-m text-neutral-primary-initial">Card</span></div>
+              <div class="flex justify-between"><span class="body-s text-neutral-secondary-initial">Date</span><span class="label-m text-neutral-primary-initial">2026-04-01</span></div>
+              <div class="flex justify-between"><span class="body-s text-neutral-secondary-initial">Order</span><span class="label-m text-action-primary-initial">ORD-8825</span></div>
+              <div class="flex justify-between"><span class="body-s text-neutral-secondary-initial">Beneficiaries</span><span class="label-m text-neutral-primary-initial">2</span></div>
+              <div class="flex justify-between"><span class="body-s text-neutral-secondary-initial">Hold release</span><span class="label-m text-neutral-primary-initial">2026-04-03</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>
