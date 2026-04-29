@@ -8,7 +8,7 @@ import AdminPaymentDetailsRefundModal from './pages/AdminPaymentDetailsRefundMod
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/uiux-330-split-payments">
       <Routes>
         <Route path="/payments" element={<AdminPaymentsList />} />
         <Route path="/payments/settled" element={<AdminPaymentDetailsSettled />} />
